@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerManager : CharacterManager
 {
-    PlayerLocalmotionManager playerLocalmotionmanager;
+    private PlayerLocalmotionManager playerLocalmotionmanager;
 
     protected override void Awake()
     {
@@ -14,6 +14,11 @@ public class PlayerManager : CharacterManager
     protected override void Update()
     {
         base.Update();
+
+        if (!IsOwner)
+        {
+            return;
+        }
 
         playerLocalmotionmanager.HandleAllMovement();
     }
