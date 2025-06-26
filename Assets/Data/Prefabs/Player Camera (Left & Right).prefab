@@ -216,3 +216,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   cameraObject: {fileID: 6499435019663613387}
+  cameraPivotTransform: {fileID: 5063482393509932479}
+  leftAndRightLookAngle: 0
+  upAndDownLookAngle: 0

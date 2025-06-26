@@ -6,11 +6,14 @@ public class PlayerInputManager : MonoBehaviour
     public static PlayerInputManager instance;
 
     [SerializeField] private Vector2 movementInput;
-    [SerializeField] private float horizontalInput;
-    [SerializeField] private float verticalInput;
-    [SerializeField] private float moveAmount;
-    
-    PlayerControls playerControls;
+    [SerializeField] private Vector2 cameraInput;
+
+    private PlayerControls playerControls;
+    private float horizontalInput;
+    private float verticalInput;
+    private float cameraHorizontalInput;
+    private float cameraVerticalInput;
+    private float moveAmount;
 
     private void Awake()
     {
@@ -35,7 +38,8 @@ public class PlayerInputManager : MonoBehaviour
 
     private void Update()
     {
-        HandleMovementInput();
+        HandlePlayerMovementInput();
+        HandleCameraMovementInput();
     }
 
     private void OnSceneChanged(Scene oldScene, Scene newScene)
@@ -51,7 +55,7 @@ public class PlayerInputManager : MonoBehaviour
         }
     }
 
-    private void HandleMovementInput()
+    private void HandlePlayerMovementInput()
     {
         horizontalInput = movementInput.x;
         verticalInput = movementInput.y;
@@ -69,6 +73,12 @@ public class PlayerInputManager : MonoBehaviour
         }
     }
 
+    private void HandleCameraMovementInput()
+    {
+        cameraHorizontalInput = cameraInput.x;
+        cameraVerticalInput = cameraInput.y;
+    }
+
     public float GetVerticalInput()
     {
         return verticalInput;
@@ -77,6 +87,16 @@ public class PlayerInputManager : MonoBehaviour
     public float GetHorizontalInput()
     {
         return horizontalInput;
+    }
+
+    public float GetCameraHorizontalInput()
+    {
+        return cameraHorizontalInput;
+    }
+
+    public float GetCameraVerticalInput()
+    {
+        return cameraVerticalInput;
     }
 
     public float GetMoveAmount()
@@ -107,6 +127,7 @@ public class PlayerInputManager : MonoBehaviour
             playerControls = new PlayerControls();
 
             playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
+            playerControls.PlayerCamera.Movement.performed += i => cameraInput = i.ReadValue<Vector2>();
         }
 
         playerControls.Enable();
