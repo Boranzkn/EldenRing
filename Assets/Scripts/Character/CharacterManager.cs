@@ -37,6 +37,11 @@ public class CharacterManager : NetworkBehaviour
         }
     }
 
+    protected virtual void LateUpdate()
+    {
+
+    }
+
     public CharacterController GetCharacterController()
     {
         return characterController;
