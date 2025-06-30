@@ -4,7 +4,7 @@ public class PlayerManager : CharacterManager
 {
     [HideInInspector] public PlayerAnimatorManager playerAnimatorManager;
 
-    private PlayerLocalmotionManager playerLocalmotionmanager;
+    [HideInInspector] public PlayerLocalmotionManager playerLocalmotionmanager;
 
     protected override void Awake()
     {

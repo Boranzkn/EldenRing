@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class PlayerLocalmotionManager : CharacterLocalmotionManager
 {
-    public float verticalMovement;
-    public float horizontalMovement;
-    public float moveAmount;
+    [HideInInspector] public float verticalMovement;
+    [HideInInspector] public float horizontalMovement;
+    [HideInInspector] public float moveAmount;
 
     [SerializeField] private float walkingSpeed = 2;
     [SerializeField] private float runningSpeed = 5;
@@ -14,6 +14,7 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
     private CharacterController characterController;
     private Vector3 moveDirection;
     private Vector3 targetRotationDirection;
+    private Vector3 rollDirection;
 
     protected override void Awake()
     {
@@ -61,6 +62,8 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
 
     private void HandleGroundedMovement()
     {
+        if (!player.canMove) return;
+
         GetMovementValues();
 
         moveDirection = PlayerCamera.instance.transform.forward * verticalMovement;
@@ -82,6 +85,8 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
 
     private void HandleRotation()
     {
+        if (!player.canRotate) return;
+
         targetRotationDirection = Vector3.zero;
         targetRotationDirection = PlayerCamera.instance.GetCamera().transform.forward * verticalMovement;
         targetRotationDirection += PlayerCamera.instance.GetCamera().transform.right * horizontalMovement;
@@ -96,5 +101,29 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
         Quaternion newRotation = Quaternion.LookRotation(targetRotationDirection);
         Quaternion targetRotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
         transform.rotation = targetRotation;
+    }
+
+    public void AttemptToPerformDodge()
+    {
+        if (player.isPerformingAction) return;
+
+        //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, PERFORM ROLL
+        if (PlayerInputManager.instance.GetMoveAmount() > 0)
+        {
+            rollDirection = PlayerCamera.instance.GetCamera().transform.forward * PlayerInputManager.instance.GetVerticalInput();
+            rollDirection += PlayerCamera.instance.GetCamera().transform.right * PlayerInputManager.instance.GetHorizontalInput();
+            rollDirection.y = 0;
+            rollDirection.Normalize();
+
+            Quaternion playerRotation = Quaternion.LookRotation(rollDirection);
+            player.transform.rotation = playerRotation;
+
+            player.playerAnimatorManager.PlayTargetActionAnimation("Roll", true);
+        }
+        //  IF WE ARE STATIONARY, PERFORM A BACKSTEP
+        else
+        {
+            player.playerAnimatorManager.PlayTargetActionAnimation("BackStep", true);
+        }
     }
 }
