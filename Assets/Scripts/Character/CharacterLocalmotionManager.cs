@@ -6,4 +6,9 @@ public class CharacterLocalmotionManager : MonoBehaviour
     {
 
     }
+
+    protected virtual void Update()
+    {
+
+    }
 }

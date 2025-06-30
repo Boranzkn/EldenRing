@@ -5,6 +5,8 @@ public class PlayerInputManager : MonoBehaviour
 {
     public static PlayerInputManager instance;
 
+    public PlayerManager player;
+
     [SerializeField] private Vector2 movementInput;
     [SerializeField] private Vector2 cameraInput;
 
@@ -71,6 +73,16 @@ public class PlayerInputManager : MonoBehaviour
         {
             moveAmount = 1;
         }
+
+
+        if (player == null)
+            return;
+
+
+        //  IF WE ARE NOT LOCKED ON, ONLY USE THE MOVE AMOUNT AND PASS 0 TO HORIZONTAL
+        player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
+
+        //  IF WE ARE LOCKED ON, PASS THE HORIZONTAL MOVEMENT AS WELL
     }
 
     private void HandleCameraMovementInput()

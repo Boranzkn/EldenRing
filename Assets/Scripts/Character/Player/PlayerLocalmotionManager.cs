@@ -23,21 +23,45 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
         characterController = player.GetCharacterController();
     }
 
+    protected override void Update()
+    {
+        base.Update();
+
+        if (player.IsOwner)
+        {
+            player.characterNetworkManager.horizontalMovement.Value = horizontalMovement;
+            player.characterNetworkManager.verticalMovement.Value = verticalMovement;
+            player.characterNetworkManager.moveAmount.Value = moveAmount;
+        }
+        else
+        {
+            horizontalMovement = player.characterNetworkManager.horizontalMovement.Value;
+            verticalMovement = player.characterNetworkManager.verticalMovement.Value;
+            moveAmount = player.characterNetworkManager.moveAmount.Value;
+
+            //  IF NOT LOCKED ON, PASS MOVE AMOUNT
+            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
+
+            //  IF LOCKED ON, PASS HORIZONTAL AND VERTICAL
+        }
+    }
+
     public void HandleAllMovement()
     {
         HandleGroundedMovement();
         HandleRotation();
     }
 
-    private void GetVerticalAndHorizontalInputs()
+    private void GetMovementValues()
     {
         verticalMovement = PlayerInputManager.instance.GetVerticalInput();
         horizontalMovement = PlayerInputManager.instance.GetHorizontalInput();
+        moveAmount = PlayerInputManager.instance.GetMoveAmount();
     }
 
     private void HandleGroundedMovement()
     {
-        GetVerticalAndHorizontalInputs();
+        GetMovementValues();
 
         moveDirection = PlayerCamera.instance.transform.forward * verticalMovement;
         moveDirection += PlayerCamera.instance.transform.right * horizontalMovement;

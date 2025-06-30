@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerManager : CharacterManager
 {
+    [HideInInspector] public PlayerAnimatorManager playerAnimatorManager;
+
     private PlayerLocalmotionManager playerLocalmotionmanager;
 
     protected override void Awake()
@@ -9,6 +11,7 @@ public class PlayerManager : CharacterManager
         base.Awake();
 
         playerLocalmotionmanager = GetComponent<PlayerLocalmotionManager>();
+        playerAnimatorManager = GetComponent<PlayerAnimatorManager>();
     }
 
     protected override void Update()
@@ -40,6 +43,7 @@ public class PlayerManager : CharacterManager
         if (IsOwner)
         {
             PlayerCamera.instance.player = this;
+            PlayerInputManager.instance.player = this;
         }
     }
 }
