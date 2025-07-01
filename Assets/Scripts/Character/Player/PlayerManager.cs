@@ -3,8 +3,8 @@ using UnityEngine;
 public class PlayerManager : CharacterManager
 {
     [HideInInspector] public PlayerAnimatorManager playerAnimatorManager;
-
     [HideInInspector] public PlayerLocalmotionManager playerLocalmotionmanager;
+    [HideInInspector] public PlayerNetworkManager playerNetworkManager;
 
     protected override void Awake()
     {
@@ -12,6 +12,7 @@ public class PlayerManager : CharacterManager
 
         playerLocalmotionmanager = GetComponent<PlayerLocalmotionManager>();
         playerAnimatorManager = GetComponent<PlayerAnimatorManager>();
+        playerNetworkManager = GetComponent<PlayerNetworkManager>();
     }
 
     protected override void Update()

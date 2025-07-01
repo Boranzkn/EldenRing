@@ -8,6 +8,7 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
 
     [SerializeField] private float walkingSpeed = 2;
     [SerializeField] private float runningSpeed = 5;
+    [SerializeField] private float sprintingSpeed = 7;
     [SerializeField] private float rotationSpeed = 15;
 
     private PlayerManager player;
@@ -41,7 +42,7 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
             moveAmount = player.characterNetworkManager.moveAmount.Value;
 
             //  IF NOT LOCKED ON, PASS MOVE AMOUNT
-            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
+            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
 
             //  IF LOCKED ON, PASS HORIZONTAL AND VERTICAL
         }
@@ -71,15 +72,22 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
         moveDirection.Normalize();
         moveDirection.y = 0;
 
-        if (PlayerInputManager.instance.GetMoveAmount() > 0.5f)
+        if (player.playerNetworkManager.isSprinting.Value)
         {
-            // MOVE AT A RUNNING SPEED
-            characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
+            characterController.Move(moveDirection * sprintingSpeed * Time.deltaTime);
         }
-        else if (PlayerInputManager.instance.GetMoveAmount() <= 0.5f)
+        else
         {
-            // MOVE AT A WALKING SPEED
-            characterController.Move(moveDirection * walkingSpeed * Time.deltaTime);
+            if (PlayerInputManager.instance.GetMoveAmount() > 0.5f)
+            {
+                // MOVE AT A RUNNING SPEED
+                characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
+            }
+            else if (PlayerInputManager.instance.GetMoveAmount() <= 0.5f)
+            {
+                // MOVE AT A WALKING SPEED
+                characterController.Move(moveDirection * walkingSpeed * Time.deltaTime);
+            }
         }
     }
 
@@ -124,6 +132,23 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
         else
         {
             player.playerAnimatorManager.PlayTargetActionAnimation("BackStep", true);
+        }
+    }
+
+    public void HandleSprinting()
+    {
+        if (player.isPerformingAction)
+        {
+            player.playerNetworkManager.isSprinting.Value = false;
+        }
+
+        if (moveAmount >= 0.5f)
+        {
+            player.playerNetworkManager.isSprinting.Value = true;
+        }
+        else
+        {
+            player.playerNetworkManager.isSprinting.Value = false;
         }
     }
 }

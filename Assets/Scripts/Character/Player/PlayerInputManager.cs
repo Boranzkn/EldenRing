@@ -10,6 +10,7 @@ public class PlayerInputManager : MonoBehaviour
     [SerializeField] private Vector2 movementInput;
     [SerializeField] private Vector2 cameraInput;
     [SerializeField] private bool dodgeInput = false;
+    [SerializeField] private bool sprintInput = false;
 
     private PlayerControls playerControls;
     private float horizontalInput;
@@ -62,6 +63,7 @@ public class PlayerInputManager : MonoBehaviour
         HandlePlayerMovementInput();
         HandleCameraMovementInput();
         HandleDodgeInput();
+        HandleSprinting();
     }
 
     private void HandlePlayerMovementInput()
@@ -87,7 +89,7 @@ public class PlayerInputManager : MonoBehaviour
 
 
         //  IF WE ARE NOT LOCKED ON, ONLY USE THE MOVE AMOUNT AND PASS 0 TO HORIZONTAL
-        player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
+        player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
 
         //  IF WE ARE LOCKED ON, PASS THE HORIZONTAL MOVEMENT AS WELL
     }
@@ -105,6 +107,18 @@ public class PlayerInputManager : MonoBehaviour
             dodgeInput = false;
 
             player.playerLocalmotionmanager.AttemptToPerformDodge();
+        }
+    }
+
+    private void HandleSprinting()
+    {
+        if (sprintInput)
+        {
+            player.playerLocalmotionmanager.HandleSprinting();
+        }
+        else
+        {
+            player.playerNetworkManager.isSprinting.Value = false;
         }
     }
 
@@ -159,8 +173,10 @@ public class PlayerInputManager : MonoBehaviour
 
             playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
             playerControls.PlayerCamera.Movement.performed += i => cameraInput = i.ReadValue<Vector2>();
-            playerControls.PlayerCamera.Mouse.performed += i => cameraInput = i.ReadValue<Vector2>();
+            //playerControls.PlayerCamera.Mouse.performed += i => cameraInput = i.ReadValue<Vector2>();
             playerControls.PlayerActions.Dodge.performed += i => dodgeInput = true;
+            playerControls.PlayerActions.Sprint.performed += i => sprintInput = true;
+            playerControls.PlayerActions.Sprint.canceled += i => sprintInput = false;
         }
 
         playerControls.Enable();
