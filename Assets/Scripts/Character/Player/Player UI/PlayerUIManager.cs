@@ -5,6 +5,8 @@ public class PlayerUIManager : MonoBehaviour
 {
     public static PlayerUIManager instance;
 
+    [HideInInspector] public PlayerUIHudManager playerUIHudManager;
+
     [Header("NETWORK JOIN")]
     [SerializeField] private bool startGameAsClient;
 
@@ -18,6 +20,8 @@ public class PlayerUIManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        playerUIHudManager = GetComponentInChildren<PlayerUIHudManager>();
     }
 
     private void Start()
