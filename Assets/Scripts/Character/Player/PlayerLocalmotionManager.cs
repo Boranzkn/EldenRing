@@ -44,7 +44,7 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
             moveAmount = player.characterNetworkManager.moveAmount.Value;
 
             //  IF NOT LOCKED ON, PASS MOVE AMOUNT
-            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
+            player.PlayerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.PlayerNetworkManager.isSprinting.Value);
 
             //  IF LOCKED ON, PASS HORIZONTAL AND VERTICAL
         }
@@ -58,9 +58,9 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
 
     private void GetMovementValues()
     {
-        verticalMovement = PlayerInputManager.instance.GetVerticalInput();
-        horizontalMovement = PlayerInputManager.instance.GetHorizontalInput();
-        moveAmount = PlayerInputManager.instance.GetMoveAmount();
+        verticalMovement = PlayerInputManager.Instance.GetVerticalInput();
+        horizontalMovement = PlayerInputManager.Instance.GetHorizontalInput();
+        moveAmount = PlayerInputManager.Instance.GetMoveAmount();
     }
 
     private void HandleGroundedMovement()
@@ -69,23 +69,23 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
 
         GetMovementValues();
 
-        moveDirection = PlayerCamera.instance.transform.forward * verticalMovement;
-        moveDirection += PlayerCamera.instance.transform.right * horizontalMovement;
+        moveDirection = PlayerCamera.Instance.transform.forward * verticalMovement;
+        moveDirection += PlayerCamera.Instance.transform.right * horizontalMovement;
         moveDirection.Normalize();
         moveDirection.y = 0;
 
-        if (player.playerNetworkManager.isSprinting.Value)
+        if (player.PlayerNetworkManager.isSprinting.Value)
         {
             characterController.Move(moveDirection * sprintingSpeed * Time.deltaTime);
         }
         else
         {
-            if (PlayerInputManager.instance.GetMoveAmount() > 0.5f)
+            if (PlayerInputManager.Instance.GetMoveAmount() > 0.5f)
             {
                 // MOVE AT A RUNNING SPEED
                 characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
             }
-            else if (PlayerInputManager.instance.GetMoveAmount() <= 0.5f)
+            else if (PlayerInputManager.Instance.GetMoveAmount() <= 0.5f)
             {
                 // MOVE AT A WALKING SPEED
                 characterController.Move(moveDirection * walkingSpeed * Time.deltaTime);
@@ -98,8 +98,8 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
         if (!player.canRotate) return;
 
         targetRotationDirection = Vector3.zero;
-        targetRotationDirection = PlayerCamera.instance.GetCamera().transform.forward * verticalMovement;
-        targetRotationDirection += PlayerCamera.instance.GetCamera().transform.right * horizontalMovement;
+        targetRotationDirection = PlayerCamera.Instance.GetCamera().transform.forward * verticalMovement;
+        targetRotationDirection += PlayerCamera.Instance.GetCamera().transform.right * horizontalMovement;
         targetRotationDirection.Normalize();
         targetRotationDirection.y = 0;
 
@@ -115,55 +115,55 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
 
     public void AttemptToPerformDodge()
     {
-        if (player.isPerformingAction || player.playerNetworkManager.currentStamina.Value <= 0) return;
+        if (player.isPerformingAction || player.PlayerNetworkManager.currentStamina.Value <= 0) return;
 
         //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, PERFORM ROLL
-        if (PlayerInputManager.instance.GetMoveAmount() > 0)
+        if (PlayerInputManager.Instance.GetMoveAmount() > 0)
         {
-            rollDirection = PlayerCamera.instance.GetCamera().transform.forward * PlayerInputManager.instance.GetVerticalInput();
-            rollDirection += PlayerCamera.instance.GetCamera().transform.right * PlayerInputManager.instance.GetHorizontalInput();
+            rollDirection = PlayerCamera.Instance.GetCamera().transform.forward * PlayerInputManager.Instance.GetVerticalInput();
+            rollDirection += PlayerCamera.Instance.GetCamera().transform.right * PlayerInputManager.Instance.GetHorizontalInput();
             rollDirection.y = 0;
             rollDirection.Normalize();
 
             Quaternion playerRotation = Quaternion.LookRotation(rollDirection);
             player.transform.rotation = playerRotation;
 
-            player.playerAnimatorManager.PlayTargetActionAnimation("Roll", true);
+            player.PlayerAnimatorManager.PlayTargetActionAnimation("Roll", true);
         }
         //  IF WE ARE STATIONARY, PERFORM A BACKSTEP
         else
         {
-            player.playerAnimatorManager.PlayTargetActionAnimation("BackStep", true);
+            player.PlayerAnimatorManager.PlayTargetActionAnimation("BackStep", true);
         }
 
-        player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
+        player.PlayerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
     }
 
     public void HandleSprinting()
     {
         if (player.isPerformingAction)
         {
-            player.playerNetworkManager.isSprinting.Value = false;
+            player.PlayerNetworkManager.isSprinting.Value = false;
         }
 
-        if (player.playerNetworkManager.currentStamina.Value <= 0)
+        if (player.PlayerNetworkManager.currentStamina.Value <= 0)
         {
-            player.playerNetworkManager.isSprinting.Value = false;
+            player.PlayerNetworkManager.isSprinting.Value = false;
             return;
         }
 
         if (moveAmount >= 0.5f)
         {
-            player.playerNetworkManager.isSprinting.Value = true;
+            player.PlayerNetworkManager.isSprinting.Value = true;
         }
         else
         {
-            player.playerNetworkManager.isSprinting.Value = false;
+            player.PlayerNetworkManager.isSprinting.Value = false;
         }
 
-        if (player.playerNetworkManager.isSprinting.Value)
+        if (player.PlayerNetworkManager.isSprinting.Value)
         {
-            player.playerNetworkManager.currentStamina.Value -= sprintingStaminaCost * Time.deltaTime;
+            player.PlayerNetworkManager.currentStamina.Value -= sprintingStaminaCost * Time.deltaTime;
         }
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    public static PlayerCamera instance;
+    public static PlayerCamera Instance;
     
     [HideInInspector] public PlayerManager player;
 
@@ -26,9 +26,9 @@ public class PlayerCamera : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
         else
         {
@@ -77,8 +77,8 @@ public class PlayerCamera : MonoBehaviour
 
         void SetLookAngles()
         {
-            leftAndRightLookAngle += (PlayerInputManager.instance.GetCameraHorizontalInput() * leftAndRightRotationSpeed) * Time.deltaTime;
-            upAndDownLookAngle -= (PlayerInputManager.instance.GetCameraVerticalInput() * upAndDownRotationSpeed) * Time.deltaTime;
+            leftAndRightLookAngle += (PlayerInputManager.Instance.GetCameraHorizontalInput() * leftAndRightRotationSpeed) * Time.deltaTime;
+            upAndDownLookAngle -= (PlayerInputManager.Instance.GetCameraVerticalInput() * upAndDownRotationSpeed) * Time.deltaTime;
             upAndDownLookAngle = Mathf.Clamp(upAndDownLookAngle, minimumPivot, maximumPivot);
         }
 

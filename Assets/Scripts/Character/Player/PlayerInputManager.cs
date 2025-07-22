@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerInputManager : MonoBehaviour
 {
-    public static PlayerInputManager instance;
+    public static PlayerInputManager Instance;
 
     public PlayerManager player;
 
@@ -21,9 +21,9 @@ public class PlayerInputManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
         else
         {
@@ -37,7 +37,7 @@ public class PlayerInputManager : MonoBehaviour
 
         SceneManager.activeSceneChanged += OnSceneChanged;
 
-        instance.enabled = false;
+        Instance.enabled = false;
     }
 
     private void Update()
@@ -48,13 +48,13 @@ public class PlayerInputManager : MonoBehaviour
     private void OnSceneChanged(Scene oldScene, Scene newScene)
     {
         // IF LOADING INTO WORLD SCENE, ENABLE PLAYER CONTROLS
-        if (newScene.buildIndex == WorldSaveGameManager.instance.GetWorldSceneIndex())
+        if (newScene.buildIndex == WorldSaveGameManager.Instance.GetWorldSceneIndex())
         {
-            instance.enabled = true;
+            Instance.enabled = true;
         }
         else
         {
-            instance.enabled=false;
+            Instance.enabled=false;
         }
     }
 
@@ -89,7 +89,7 @@ public class PlayerInputManager : MonoBehaviour
 
 
         //  IF WE ARE NOT LOCKED ON, ONLY USE THE MOVE AMOUNT AND PASS 0 TO HORIZONTAL
-        player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
+        player.PlayerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.PlayerNetworkManager.isSprinting.Value);
 
         //  IF WE ARE LOCKED ON, PASS THE HORIZONTAL MOVEMENT AS WELL
     }
@@ -106,7 +106,7 @@ public class PlayerInputManager : MonoBehaviour
         {
             dodgeInput = false;
 
-            player.playerLocalmotionmanager.AttemptToPerformDodge();
+            player.PlayerLocalmotionmanager.AttemptToPerformDodge();
         }
     }
 
@@ -114,11 +114,11 @@ public class PlayerInputManager : MonoBehaviour
     {
         if (sprintInput)
         {
-            player.playerLocalmotionmanager.HandleSprinting();
+            player.PlayerLocalmotionmanager.HandleSprinting();
         }
         else
         {
-            player.playerNetworkManager.isSprinting.Value = false;
+            player.PlayerNetworkManager.isSprinting.Value = false;
         }
     }
 

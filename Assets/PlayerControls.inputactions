@@ -289,6 +289,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "UI",
+            "id": "2a5c1584-78ed-4db6-ad73-480900c6129e",
+            "actions": [
+                {
+                    "name": "X",
+                    "type": "Button",
+                    "id": "e955672b-42bd-4aa9-b6c9-fa02ed0b2f73",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0fb7774b-6aa0-4df7-b716-db49185f07c9",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "X",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

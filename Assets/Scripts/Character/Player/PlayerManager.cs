@@ -1,20 +1,21 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : CharacterManager
 {
-    [HideInInspector] public PlayerAnimatorManager playerAnimatorManager;
-    [HideInInspector] public PlayerLocalmotionManager playerLocalmotionmanager;
-    [HideInInspector] public PlayerNetworkManager playerNetworkManager;
-    [HideInInspector] public PlayerStatsManager playerStatsManager;
+    [HideInInspector] public PlayerAnimatorManager PlayerAnimatorManager { private set; get; }
+    [HideInInspector] public PlayerLocalmotionManager PlayerLocalmotionmanager { private set; get; }
+    [HideInInspector] public PlayerNetworkManager PlayerNetworkManager { private set; get; }
+    [HideInInspector] public PlayerStatsManager PlayerStatsManager { private set; get; }
 
     protected override void Awake()
     {
         base.Awake();
 
-        playerLocalmotionmanager = GetComponent<PlayerLocalmotionManager>();
-        playerAnimatorManager = GetComponent<PlayerAnimatorManager>();
-        playerNetworkManager = GetComponent<PlayerNetworkManager>();
-        playerStatsManager = GetComponent<PlayerStatsManager>();
+        PlayerLocalmotionmanager = GetComponent<PlayerLocalmotionManager>();
+        PlayerAnimatorManager = GetComponent<PlayerAnimatorManager>();
+        PlayerNetworkManager = GetComponent<PlayerNetworkManager>();
+        PlayerStatsManager = GetComponent<PlayerStatsManager>();
     }
 
     protected override void Update()
@@ -26,9 +27,9 @@ public class PlayerManager : CharacterManager
             return;
         }
 
-        playerLocalmotionmanager.HandleAllMovement();
+        PlayerLocalmotionmanager.HandleAllMovement();
 
-        playerStatsManager.RegenerateStamina();
+        PlayerStatsManager.RegenerateStamina();
     }
 
     protected override void LateUpdate()
@@ -38,7 +39,7 @@ public class PlayerManager : CharacterManager
 
         base.LateUpdate();
 
-        PlayerCamera.instance.HandleAllCameraActions();
+        PlayerCamera.Instance.HandleAllCameraActions();
     }
 
     public override void OnNetworkSpawn()
@@ -47,15 +48,32 @@ public class PlayerManager : CharacterManager
 
         if (IsOwner)
         {
-            PlayerCamera.instance.player = this;
-            PlayerInputManager.instance.player = this;
+            PlayerCamera.Instance.player = this;
+            PlayerInputManager.Instance.player = this;
+            WorldSaveGameManager.Instance.player = this;
 
-            playerNetworkManager.currentStamina.OnValueChanged += PlayerUIManager.instance.playerUIHudManager.SetNewStaminaValue;
-            playerNetworkManager.currentStamina.OnValueChanged += playerStatsManager.ResetStaminaRegenerationTimer;
+            PlayerNetworkManager.currentStamina.OnValueChanged += PlayerUIManager.instance.playerUIHudManager.SetNewStaminaValue;
+            PlayerNetworkManager.currentStamina.OnValueChanged += PlayerStatsManager.ResetStaminaRegenerationTimer;
 
-            playerNetworkManager.maxStamina.Value = playerStatsManager.CalculateStaminaBasedOnEnduranceLevel(playerNetworkManager.endurance.Value);
-            playerNetworkManager.currentStamina.Value = playerStatsManager.CalculateStaminaBasedOnEnduranceLevel(playerNetworkManager.endurance.Value);
-            PlayerUIManager.instance.playerUIHudManager.SetMaxStaminaValue(playerNetworkManager.maxStamina.Value);
+            PlayerNetworkManager.maxStamina.Value = PlayerStatsManager.CalculateStaminaBasedOnEnduranceLevel(PlayerNetworkManager.endurance.Value);
+            PlayerNetworkManager.currentStamina.Value = PlayerStatsManager.CalculateStaminaBasedOnEnduranceLevel(PlayerNetworkManager.endurance.Value);
+            PlayerUIManager.instance.playerUIHudManager.SetMaxStaminaValue(PlayerNetworkManager.maxStamina.Value);
         }
+    }
+
+    public void SaveGameDataToCurrentCharacterData(ref CharacterSaveData currentCharacterData)
+    {
+        currentCharacterData.sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        currentCharacterData.characterName = PlayerNetworkManager.characterName.Value.ToString();
+        currentCharacterData.xPosition = transform.position.x;
+        currentCharacterData.yPosition = transform.position.y;
+        currentCharacterData.zPosition = transform.position.z;
+    }
+
+    public void LoadGameDataFromCurrentCharacterData(ref CharacterSaveData currentCharacterData)
+    {
+        PlayerNetworkManager.characterName.Value = currentCharacterData.characterName;
+        Vector3 myPosition = new Vector3(currentCharacterData.xPosition, currentCharacterData.yPosition, currentCharacterData.zPosition);
+        transform.position = myPosition;
     }
 }
