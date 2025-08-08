@@ -2,22 +2,32 @@ using UnityEngine;
 
 public class PlayerLocalmotionManager : CharacterLocalmotionManager
 {
-    [HideInInspector] public float verticalMovement;
-    [HideInInspector] public float horizontalMovement;
-    [HideInInspector] public float moveAmount;
-
-    [SerializeField] private float walkingSpeed = 2;
-    [SerializeField] private float runningSpeed = 5;
-    [SerializeField] private float sprintingSpeed = 7;
-    [SerializeField] private float rotationSpeed = 15;
-    [SerializeField] private int sprintingStaminaCost = 2;
-
     private PlayerManager player;
+
+    [Header("Movement")]
     private CharacterController characterController;
     private Vector3 moveDirection;
     private Vector3 targetRotationDirection;
+    private float verticalMovement;
+    private float horizontalMovement;
+    private float moveAmount;
+    private float walkingSpeed = 2;
+    private float runningSpeed = 5;
+    private float sprintingSpeed = 7;
+    private float rotationSpeed = 15;
+    private int sprintingStaminaCost = 2;
+
+    [Header("Dodge")]
     private Vector3 rollDirection;
     private float dodgeStaminaCost = 25;
+
+    [Header("Jump")]
+    private Vector3 jumpDirection;
+    private float jumpStaminaCost = 25;
+    private float jumpHeight = 4;
+    private float jumpForwardSpeed= 5;
+    private float freeFallSpeed= 2;
+
 
     protected override void Awake()
     {
@@ -54,13 +64,8 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
     {
         HandleGroundedMovement();
         HandleRotation();
-    }
-
-    private void GetMovementValues()
-    {
-        verticalMovement = PlayerInputManager.Instance.GetVerticalInput();
-        horizontalMovement = PlayerInputManager.Instance.GetHorizontalInput();
-        moveAmount = PlayerInputManager.Instance.GetMoveAmount();
+        HandleJumpingMovement();
+        HandleFreeFallMovement();
     }
 
     private void HandleGroundedMovement()
@@ -113,6 +118,36 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
         transform.rotation = targetRotation;
     }
 
+    private void HandleJumpingMovement()
+    {
+        if (player.isJumping)
+        {
+            player.GetCharacterController().Move(jumpDirection * jumpForwardSpeed * Time.deltaTime);
+        }
+    }
+
+    private void HandleFreeFallMovement()
+    {
+        if (!player.isGrounded)
+        {
+            Vector3 freeFallDirection;
+
+            freeFallDirection = PlayerCamera.Instance.transform.forward * PlayerInputManager.Instance.GetVerticalInput();
+            freeFallDirection += PlayerCamera.Instance.transform.right * PlayerInputManager.Instance.GetHorizontalInput();
+            freeFallDirection.y = 0;
+
+            player.GetCharacterController().Move(freeFallDirection * freeFallSpeed * Time.deltaTime);
+        }
+    }
+
+
+    private void GetMovementValues()
+    {
+        verticalMovement = PlayerInputManager.Instance.GetVerticalInput();
+        horizontalMovement = PlayerInputManager.Instance.GetHorizontalInput();
+        moveAmount = PlayerInputManager.Instance.GetMoveAmount();
+    }
+
     public void AttemptToPerformDodge()
     {
         if (player.isPerformingAction || player.PlayerNetworkManager.currentStamina.Value <= 0) return;
@@ -137,6 +172,42 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
         }
 
         player.PlayerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
+    }
+
+    public void AttemptToPerformJump()
+    {
+        if (player.isPerformingAction || player.PlayerNetworkManager.currentStamina.Value <= 0 || player.isJumping || !player.isGrounded) return;
+
+        player.PlayerAnimatorManager.PlayTargetActionAnimation("Jump Start", false);
+
+        player.isJumping = true;
+
+        player.PlayerNetworkManager.currentStamina.Value -= jumpStaminaCost;
+
+        jumpDirection = PlayerCamera.Instance.GetCamera().transform.forward * PlayerInputManager.Instance.GetVerticalInput();
+        jumpDirection += PlayerCamera.Instance.GetCamera().transform.right * PlayerInputManager.Instance.GetHorizontalInput();
+        jumpDirection.y = 0;
+
+        if (jumpDirection != Vector3.zero)
+        {
+            if (player.PlayerNetworkManager.isSprinting.Value)
+            {
+                jumpDirection *= 1;
+            }
+            else if (PlayerInputManager.Instance.GetMoveAmount() > 0.5f)
+            {
+                jumpDirection *= 0.5f;
+            }
+            else if (PlayerInputManager.Instance.GetMoveAmount() <= 0.5f)
+            {
+                jumpDirection *= 0.25f;
+            }
+        }
+    }
+
+    public void ApplyJumpingVelocity()
+    {
+        yVelocity.y = Mathf.Sqrt(jumpHeight * -2 * gravityForce);
     }
 
     public void HandleSprinting()

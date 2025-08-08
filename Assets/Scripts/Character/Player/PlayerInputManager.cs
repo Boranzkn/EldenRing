@@ -7,17 +7,23 @@ public class PlayerInputManager : MonoBehaviour
 
     public PlayerManager player;
 
-    [SerializeField] private Vector2 movementInput;
-    [SerializeField] private Vector2 cameraInput;
-    [SerializeField] private bool dodgeInput = false;
-    [SerializeField] private bool sprintInput = false;
-
     private PlayerControls playerControls;
-    private float horizontalInput;
-    private float verticalInput;
+
+    [Header("Camera Movement Input")]
+    private Vector2 cameraInput;
     private float cameraHorizontalInput;
     private float cameraVerticalInput;
+
+    [Header("Player Movement Input")]
+    private Vector2 movementInput;
+    private float horizontalInput;
+    private float verticalInput;
     private float moveAmount;
+
+    [Header("Player Action Input")]
+    private bool dodgeInput = false;
+    private bool sprintInput = false;
+    private bool jumpInput = false;
 
     private void Awake()
     {
@@ -63,7 +69,8 @@ public class PlayerInputManager : MonoBehaviour
         HandlePlayerMovementInput();
         HandleCameraMovementInput();
         HandleDodgeInput();
-        HandleSprinting();
+        HandleSprintInput();
+        HandleJumpInput();
     }
 
     private void HandlePlayerMovementInput()
@@ -110,7 +117,7 @@ public class PlayerInputManager : MonoBehaviour
         }
     }
 
-    private void HandleSprinting()
+    private void HandleSprintInput()
     {
         if (sprintInput)
         {
@@ -119,6 +126,16 @@ public class PlayerInputManager : MonoBehaviour
         else
         {
             player.PlayerNetworkManager.isSprinting.Value = false;
+        }
+    }
+
+    private void HandleJumpInput()
+    {
+        if (jumpInput)
+        {
+            jumpInput = false;
+
+            player.PlayerLocalmotionmanager.AttemptToPerformJump();
         }
     }
 
@@ -175,6 +192,7 @@ public class PlayerInputManager : MonoBehaviour
             playerControls.PlayerCamera.Movement.performed += i => cameraInput = i.ReadValue<Vector2>();
             //playerControls.PlayerCamera.Mouse.performed += i => cameraInput = i.ReadValue<Vector2>();
             playerControls.PlayerActions.Dodge.performed += i => dodgeInput = true;
+            playerControls.PlayerActions.Jump.performed += i => jumpInput = true;
             playerControls.PlayerActions.Sprint.performed += i => sprintInput = true;
             playerControls.PlayerActions.Sprint.canceled += i => sprintInput = false;
         }
