@@ -10,7 +10,7 @@ public class CharacterLocalmotionManager : MonoBehaviour
     protected float groundedYVelocity = -20;
     protected float fallStartYVelocity = -5;
     protected float inAirTimer = 0;
-    protected float gravityForce = -5f;  // make it -40 later
+    protected float gravityForce = -40f;
     protected bool fallingVelocityHasBeenSet = false;
     private float groundCheckSphereRadius = 0.3f;
 
