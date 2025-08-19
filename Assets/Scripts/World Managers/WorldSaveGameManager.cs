@@ -65,8 +65,6 @@ public class WorldSaveGameManager : MonoBehaviour
     public IEnumerator LoadWorldScene()
     {
         AsyncOperation loadOperation = SceneManager.LoadSceneAsync(worldSceneIndex);
-        
-        //AsyncOperation loadOperation = SceneManager.LoadSceneAsync(currentCharacterData.sceneIndex);
 
         player.LoadGameDataFromCurrentCharacterData(ref currentCharacterData);
 
@@ -102,12 +100,18 @@ public class WorldSaveGameManager : MonoBehaviour
                 //  IF THIS PROFILE SLOT IS NOT TAKEN, MAKE A NEW ONE USING THIS SLOT
                 currentCharacterSlotBeingUsed = characterSlot;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return true;
             }
 
             return false;
         }
+    }
+
+    private void NewGame()
+    {
+        SaveGame();
+        StartCoroutine(LoadWorldScene());
     }
 
     public void LoadGame()

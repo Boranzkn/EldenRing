@@ -8,12 +8,24 @@ public class CharacterStatsManager : MonoBehaviour
     [Header("Stamina")]
     private float staminaRegenerationTimer = 0;
     private float staminaRegenerationDelay = 2;
-    private float staminaRegenerationAmount = 2;
+    private float staminaRegenerationAmount = 20;
     private float staminaTickTimer;
 
     protected virtual void Awake()
     {
         character = GetComponent<CharacterManager>();
+    }
+
+    protected virtual void Start()
+    {
+
+    }
+
+    public int CalculateHealthBasedOnVitalityLevel(int vitality)
+    {
+        float health = vitality * 20;
+
+        return Mathf.RoundToInt(health);
     }
 
     public int CalculateStaminaBasedOnEnduranceLevel(int endurance)

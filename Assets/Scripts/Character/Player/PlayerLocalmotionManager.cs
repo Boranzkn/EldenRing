@@ -15,15 +15,15 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
     private float runningSpeed = 5;
     private float sprintingSpeed = 7;
     private float rotationSpeed = 15;
-    private int sprintingStaminaCost = 2;
+    private int sprintingStaminaCost = 30;
 
     [Header("Dodge")]
     private Vector3 rollDirection;
-    private float dodgeStaminaCost = 25;
+    private float dodgeStaminaCost = 50;
 
     [Header("Jump")]
     private Vector3 jumpDirection;
-    private float jumpStaminaCost = 25;
+    private float jumpStaminaCost = 50;
     private float jumpHeight = 4;
     private float jumpForwardSpeed= 5;
     private float freeFallSpeed= 2;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerUIManager : MonoBehaviour
 {
-    public static PlayerUIManager instance;
+    public static PlayerUIManager Instance;
 
     [HideInInspector] public PlayerUIHudManager playerUIHudManager;
 
@@ -12,9 +12,9 @@ public class PlayerUIManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
         else
         {
