@@ -8,7 +8,7 @@ public class CharacterStatsManager : MonoBehaviour
     [Header("Stamina")]
     private float staminaRegenerationTimer = 0;
     private float staminaRegenerationDelay = 2;
-    private float staminaRegenerationAmount = 20;
+    private float staminaRegenerationAmount = 10;
     private float staminaTickTimer;
 
     protected virtual void Awake()
@@ -23,7 +23,7 @@ public class CharacterStatsManager : MonoBehaviour
 
     public int CalculateHealthBasedOnVitalityLevel(int vitality)
     {
-        float health = vitality * 20;
+        float health = vitality * 10;
 
         return Mathf.RoundToInt(health);
     }

@@ -4,9 +4,13 @@ using UnityEngine;
 public class CharacterManager : NetworkBehaviour
 {
     [HideInInspector] public Animator animator;
-    [HideInInspector] public CharacterNetworkManager characterNetworkManager;
+    [HideInInspector] public CharacterNetworkManager characterNetworkManager;   
+    [HideInInspector] public CharacterEffectsManager characterEffectsManager;
 
     protected CharacterController characterController;
+
+    [Header("Status")]
+    public NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     [Header("Flags")]
     public bool isPerformingAction = false;
@@ -23,6 +27,7 @@ public class CharacterManager : NetworkBehaviour
         animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
         characterNetworkManager = GetComponent<CharacterNetworkManager>();
+        characterEffectsManager = GetComponent<CharacterEffectsManager>();
     }
 
     protected virtual void Update()

@@ -5,6 +5,9 @@ public class WorldCharacterEffectsManager : MonoBehaviour
 {
     public static WorldCharacterEffectsManager Instance {  get; private set; }
 
+    [Header("Damage")]
+    [SerializeField] public TakeDamageEffect takeDamageEffect;
+
     [SerializeField] private List<InstantCharacterEffect> instantEffects;
 
     private void Awake()

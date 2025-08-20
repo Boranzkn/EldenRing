@@ -9,7 +9,7 @@ public class UI_StatBar : MonoBehaviour
 
     [Header("Bar Options")]
     protected bool scaleBarLenghtWithStats = true;
-    protected float widthScaleMultiplier = 1f;
+    public float widthScaleMultiplier = 3f;
 
     protected virtual void Awake()
     {
