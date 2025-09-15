@@ -37,20 +37,20 @@ public class CharacterStatsManager : MonoBehaviour
 
     public virtual void RegenerateStamina()
     {
-        if (!character.IsOwner || character.characterNetworkManager.isSprinting.Value || character.isPerformingAction) { return; }
+        if (!character.IsOwner || character.CharacterNetworkManager.isSprinting.Value || character.isPerformingAction) { return; }
 
         staminaRegenerationTimer += Time.deltaTime;
 
         if (staminaRegenerationTimer >= staminaRegenerationDelay)
         {
-            if (character.characterNetworkManager.currentStamina.Value < character.characterNetworkManager.maxStamina.Value)
+            if (character.CharacterNetworkManager.currentStamina.Value < character.CharacterNetworkManager.maxStamina.Value)
             {
                 staminaTickTimer += Time.deltaTime;
 
                 if (staminaTickTimer >= 0.1)
                 {
                     staminaTickTimer = 0;
-                    character.characterNetworkManager.currentStamina.Value += staminaRegenerationAmount;
+                    character.CharacterNetworkManager.currentStamina.Value += staminaRegenerationAmount;
                 }
             }
         }

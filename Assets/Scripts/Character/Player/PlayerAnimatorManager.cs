@@ -13,8 +13,8 @@ public class PlayerAnimatorManager : CharacterAnimatorManager
 
     private void OnAnimatorMove()
     {
-        Vector3 velocity = player.animator.deltaPosition;
+        Vector3 velocity = player.Animator.deltaPosition;
         player.GetCharacterController().Move(velocity);
-        player.transform.rotation *= player.animator.deltaRotation;
+        player.transform.rotation *= player.Animator.deltaRotation;
     }
 }

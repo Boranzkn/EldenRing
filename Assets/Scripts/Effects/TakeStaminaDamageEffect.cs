@@ -14,7 +14,7 @@ public class TakeStaminaDamageEffect : InstantCharacterEffect
     {
         if (character.IsOwner)
         {
-            character.characterNetworkManager.currentStamina.Value -= staminaDamage;
+            character.CharacterNetworkManager.currentStamina.Value -= staminaDamage;
         }
     }
 }

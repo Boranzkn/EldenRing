@@ -3,25 +3,20 @@ using UnityEngine;
 
 public class PlayerUIManager : MonoBehaviour
 {
-    public static PlayerUIManager Instance;
+    public static PlayerUIManager Instance { private set; get; }
 
-    [HideInInspector] public PlayerUIHudManager playerUIHudManager;
+    [HideInInspector] public PlayerUIHudManager PlayerUIHudManager { private set; get; }
+    [HideInInspector] public PlayerUIPopUpManager PlayerUIPopUpManager { private set; get; }
 
     [Header("NETWORK JOIN")]
     [SerializeField] private bool startGameAsClient;
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Instance = this;
 
-        playerUIHudManager = GetComponentInChildren<PlayerUIHudManager>();
+        PlayerUIHudManager = GetComponentInChildren<PlayerUIHudManager>();
+        PlayerUIPopUpManager = GetComponentInChildren<PlayerUIPopUpManager>();
     }
 
     private void Start()

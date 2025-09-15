@@ -21,7 +21,7 @@ public class CharacterNetworkManager : NetworkBehaviour
     public NetworkVariable<bool> isSprinting = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     [Header("Resources")]
-    public NetworkVariable<float> currentHealth = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<int> currentHealth = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     public NetworkVariable<int> maxHealth = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     public NetworkVariable<float> currentStamina = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     public NetworkVariable<int> maxStamina = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
@@ -33,6 +33,19 @@ public class CharacterNetworkManager : NetworkBehaviour
     protected virtual void Awake()
     {
         character = GetComponent<CharacterManager>();
+    }
+
+    public void CheckHP(int oldValue, int newValue)
+    {
+        if (currentHealth.Value <= 0)
+        {
+            StartCoroutine(character.ProcessDeathEvent());
+        }
+
+        if (character.IsOwner && currentHealth.Value > maxHealth.Value)
+        {
+            currentHealth.Value = maxHealth.Value;
+        }
     }
 
     [ServerRpc]
@@ -50,7 +63,7 @@ public class CharacterNetworkManager : NetworkBehaviour
         if (clientID != NetworkManager.Singleton.LocalClientId)
         {
             character.applyRootMotion = applyRootMotion;
-            character.animator.CrossFade(animationID, 0.2f);
+            character.Animator.CrossFade(animationID, 0.2f);
         }
     }
 }

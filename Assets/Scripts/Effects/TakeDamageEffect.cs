@@ -56,6 +56,6 @@ public class TakeDamageEffect : InstantCharacterEffect
 
         if (finalDamageDealt <= 0) finalDamageDealt = 1;
 
-        character.characterNetworkManager.currentHealth.Value -= finalDamageDealt;
+        character.CharacterNetworkManager.currentHealth.Value -= finalDamageDealt;
     }
 }

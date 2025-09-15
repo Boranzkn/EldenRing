@@ -43,15 +43,15 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
 
         if (player.IsOwner)
         {
-            player.characterNetworkManager.horizontalMovement.Value = horizontalMovement;
-            player.characterNetworkManager.verticalMovement.Value = verticalMovement;
-            player.characterNetworkManager.moveAmount.Value = moveAmount;
+            player.CharacterNetworkManager.horizontalMovement.Value = horizontalMovement;
+            player.CharacterNetworkManager.verticalMovement.Value = verticalMovement;
+            player.CharacterNetworkManager.moveAmount.Value = moveAmount;
         }
         else
         {
-            horizontalMovement = player.characterNetworkManager.horizontalMovement.Value;
-            verticalMovement = player.characterNetworkManager.verticalMovement.Value;
-            moveAmount = player.characterNetworkManager.moveAmount.Value;
+            horizontalMovement = player.CharacterNetworkManager.horizontalMovement.Value;
+            verticalMovement = player.CharacterNetworkManager.verticalMovement.Value;
+            moveAmount = player.CharacterNetworkManager.moveAmount.Value;
 
             //  IF NOT LOCKED ON, PASS MOVE AMOUNT
             player.PlayerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.PlayerNetworkManager.isSprinting.Value);

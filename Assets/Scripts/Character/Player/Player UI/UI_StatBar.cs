@@ -31,7 +31,7 @@ public class UI_StatBar : MonoBehaviour
         if (scaleBarLenghtWithStats)
         {
             rectTransform.sizeDelta = new Vector2(maxValue * widthScaleMultiplier, rectTransform.sizeDelta.y);
-            PlayerUIManager.Instance.playerUIHudManager.RefreshHUD();
+            PlayerUIManager.Instance.PlayerUIHudManager.RefreshHUD();
         }
     }
 }

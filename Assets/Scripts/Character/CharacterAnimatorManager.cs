@@ -25,19 +25,19 @@ public class CharacterAnimatorManager : MonoBehaviour
             verticalAmount = 2;
         }
 
-        character.animator.SetFloat(horizontal, horizontalAmount, 0.1f , Time.deltaTime);
-        character.animator.SetFloat(vertical, verticalAmount, 0.1f, Time.deltaTime);
+        character.Animator.SetFloat(horizontal, horizontalAmount, 0.1f , Time.deltaTime);
+        character.Animator.SetFloat(vertical, verticalAmount, 0.1f, Time.deltaTime);
     }
 
     public virtual void PlayTargetActionAnimation(string targetAnimation, bool isPerformingAction, bool applyRootMotion = true, bool canRotate = false, bool canMove = false)
     {
         character.applyRootMotion = applyRootMotion;
-        character.animator.CrossFade(targetAnimation, 0.2f);
+        character.Animator.CrossFade(targetAnimation, 0.2f);
         character.isPerformingAction = isPerformingAction;
         character.canRotate = canRotate;
         character.canMove = canMove;
 
         //  PLAY ANIMATION ACROSS NETWORK
-        character.characterNetworkManager.PlayActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
+        character.CharacterNetworkManager.PlayActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
     }
 }

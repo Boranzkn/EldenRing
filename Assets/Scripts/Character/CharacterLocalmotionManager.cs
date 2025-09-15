@@ -42,7 +42,7 @@ public class CharacterLocalmotionManager : MonoBehaviour
 
             inAirTimer += Time.deltaTime;
 
-            character.animator.SetFloat("InAirTimer", inAirTimer);
+            character.Animator.SetFloat("InAirTimer", inAirTimer);
 
             yVelocity.y += gravityForce * Time.deltaTime;
         }

@@ -1,11 +1,16 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
 public class CharacterManager : NetworkBehaviour
 {
-    [HideInInspector] public Animator animator;
-    [HideInInspector] public CharacterNetworkManager characterNetworkManager;   
-    [HideInInspector] public CharacterEffectsManager characterEffectsManager;
+    private const string DEATH_ANIMATION = "Death";
+
+    [HideInInspector] public Animator Animator { private set; get; }
+
+    [HideInInspector] public CharacterNetworkManager CharacterNetworkManager { private set; get; }
+    [HideInInspector] public CharacterEffectsManager CharacterEffectsManager { private set; get; }
+    [HideInInspector] public CharacterAnimatorManager CharacterAnimatorManager { private set; get; }
 
     protected CharacterController characterController;
 
@@ -24,33 +29,35 @@ public class CharacterManager : NetworkBehaviour
     {
         DontDestroyOnLoad(this);
 
-        animator = GetComponent<Animator>();
+        Animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
-        characterNetworkManager = GetComponent<CharacterNetworkManager>();
-        characterEffectsManager = GetComponent<CharacterEffectsManager>();
+
+        CharacterNetworkManager = GetComponent<CharacterNetworkManager>();
+        CharacterEffectsManager = GetComponent<CharacterEffectsManager>();
+        CharacterAnimatorManager = GetComponent<CharacterAnimatorManager>();
     }
 
     protected virtual void Update()
     {
-        animator.SetBool("IsGrounded", isGrounded);
+        Animator.SetBool("IsGrounded", isGrounded);
 
         if (IsOwner)
         {
-            characterNetworkManager.networkPosition.Value = transform.position;
-            characterNetworkManager.networkRotation.Value = transform.rotation;
+            CharacterNetworkManager.networkPosition.Value = transform.position;
+            CharacterNetworkManager.networkRotation.Value = transform.rotation;
         }
         else
         {
             transform.position = Vector3.SmoothDamp(
                 transform.position, 
-                characterNetworkManager.networkPosition.Value, 
-                ref characterNetworkManager.networkPositionVelocity, 
-                characterNetworkManager.networkPositionSmoothTime);
+                CharacterNetworkManager.networkPosition.Value, 
+                ref CharacterNetworkManager.networkPositionVelocity, 
+                CharacterNetworkManager.networkPositionSmoothTime);
 
             transform.rotation = Quaternion.Slerp(
                 transform.rotation, 
-                characterNetworkManager.networkRotation.Value, 
-                characterNetworkManager.networkRotionSmoothTime);
+                CharacterNetworkManager.networkRotation.Value, 
+                CharacterNetworkManager.networkRotionSmoothTime);
         }
     }
 
@@ -62,5 +69,26 @@ public class CharacterManager : NetworkBehaviour
     public CharacterController GetCharacterController()
     {
         return characterController;
+    }
+
+    public virtual IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
+    {
+        if (IsOwner)
+        {
+            CharacterNetworkManager.currentHealth.Value = 0;
+            isDead.Value = true;
+
+            if (!manuallySelectDeathAnimation)
+            {
+                CharacterAnimatorManager.PlayTargetActionAnimation(DEATH_ANIMATION, true);
+            }
+        }
+
+        yield return new WaitForSeconds(5);
+    }
+
+    public virtual void ReviveCharacter()
+    {
+
     }
 }
