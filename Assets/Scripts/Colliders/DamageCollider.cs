@@ -3,12 +3,15 @@ using UnityEngine;
 
 public class DamageCollider : MonoBehaviour
 {
+    [Header("Collider")]
+    protected Collider damageCollider;
+
     [Header("Damage")]
-    [SerializeField] private float physicalDamage = 0;
-    [SerializeField] private float magicDamage = 0;
-    [SerializeField] private float fireDamage = 0;
-    [SerializeField] private float lightningDamage = 0;
-    [SerializeField] private float holyDamage = 0;
+    public float physicalDamage = 0;
+    public float magicDamage = 0;
+    public float fireDamage = 0;
+    public float lightningDamage = 0;
+    public float holyDamage = 0;
 
     [Header("Contact Point")]
     protected Vector3 contactPoint;
@@ -43,5 +46,16 @@ public class DamageCollider : MonoBehaviour
         damageEffect.contactPoint = contactPoint;
 
         damageTarget.CharacterEffectsManager.ProcessInstantEffect(damageEffect);
+    }
+
+    public virtual void EnableDamageCollider()
+    {
+        damageCollider.enabled = true;
+    }
+
+    public virtual void DisableDamageCollider()
+    {
+        damageCollider.enabled = false;
+        charactersDamaged.Clear();
     }
 }

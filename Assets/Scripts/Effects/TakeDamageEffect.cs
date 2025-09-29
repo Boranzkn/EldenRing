@@ -18,20 +18,20 @@ public class TakeDamageEffect : InstantCharacterEffect
     private int finalDamageDealt = 0;
 
     [Header("Poise")]
-    private float poiseDamage = 0;
-    private bool poiseIsBroken = false;
+    //private float poiseDamage = 0;
+    //private bool poiseIsBroken = false;
 
     [Header("Animation")]
-    private bool playDamageAnimation = true;
-    private bool manuallySelectDamageAnimation = false;
-    private string damageAnimation;
+    //private bool playDamageAnimation = true;
+    //private bool manuallySelectDamageAnimation = false;
+    //private string damageAnimation;
 
     [Header("Sound FX")]
-    private bool willPlayDamageSFX = true;
-    private AudioClip elementalDamageSoundFX;
+    //private bool willPlayDamageSFX = true;
+    //private AudioClip elementalDamageSoundFX;
 
     [Header("Direction of Damage Taken From")]
-    private float angleHitFrom;
+    //private float angleHitFrom;
     public Vector3 contactPoint;
 
     public override void ProcessEffect(CharacterManager character)

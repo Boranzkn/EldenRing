@@ -8,9 +8,12 @@ public class PlayerManager : CharacterManager
     [HideInInspector] public PlayerLocalmotionManager PlayerLocalmotionmanager { private set; get; }
     [HideInInspector] public PlayerNetworkManager PlayerNetworkManager { private set; get; }
     [HideInInspector] public PlayerStatsManager PlayerStatsManager { private set; get; }
+    [HideInInspector] public PlayerInventoryManager PlayerInventoryManager { private set; get; }
+    [HideInInspector] public PlayerEquipmentManager PlayerEquipmentManager { private set; get; }
 
     [Header("DEBUG MENU")]
     [SerializeField] private bool respawnCharacter = false;
+    [SerializeField] private bool switchRightWeapon = false;
 
     protected override void Awake()
     {
@@ -20,6 +23,8 @@ public class PlayerManager : CharacterManager
         PlayerAnimatorManager = GetComponent<PlayerAnimatorManager>();
         PlayerNetworkManager = GetComponent<PlayerNetworkManager>();
         PlayerStatsManager = GetComponent<PlayerStatsManager>();
+        PlayerInventoryManager = GetComponent<PlayerInventoryManager>();
+        PlayerEquipmentManager = GetComponent<PlayerEquipmentManager>();
     }
 
     protected override void Update()
@@ -68,7 +73,12 @@ public class PlayerManager : CharacterManager
             PlayerNetworkManager.currentStamina.OnValueChanged += PlayerStatsManager.ResetStaminaRegenerationTimer;
         }
 
+        //  CHECKS IF THE PLAYER DIED WHEN HEALTH CHANGES
         PlayerNetworkManager.currentHealth.OnValueChanged += PlayerNetworkManager.CheckHP;
+
+        //  UPDATES THE EQUIPPED WEAPON WHEN THE WEAPON ID CHANGES
+        PlayerNetworkManager.currentRightHandWeaponID.OnValueChanged += PlayerNetworkManager.OnCurrentRightHandWeaponIDChange;
+        PlayerNetworkManager.currentLeftHandWeaponID.OnValueChanged += PlayerNetworkManager.OnCurrentLeftHandWeaponIDChange;
     }
 
     public override IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
@@ -130,6 +140,12 @@ public class PlayerManager : CharacterManager
         {
             respawnCharacter = false;
             ReviveCharacter();
+        }
+
+        if (switchRightWeapon)
+        {
+            switchRightWeapon = false;
+            PlayerEquipmentManager.SwitchRightWeapon();
         }
     }
 }
