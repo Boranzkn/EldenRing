@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -35,6 +36,11 @@ public class CharacterManager : NetworkBehaviour
         CharacterNetworkManager = GetComponent<CharacterNetworkManager>();
         CharacterEffectsManager = GetComponent<CharacterEffectsManager>();
         CharacterAnimatorManager = GetComponent<CharacterAnimatorManager>();
+    }
+
+    protected virtual void Start()
+    {
+        IgnoreMyOwnColliders();
     }
 
     protected virtual void Update()
@@ -90,5 +96,30 @@ public class CharacterManager : NetworkBehaviour
     public virtual void ReviveCharacter()
     {
 
+    }
+
+    protected virtual void IgnoreMyOwnColliders()
+    {
+        Collider characterControllerCollider = GetComponent<Collider>();
+        Collider[] damageableCharacterColliders = GetComponentsInChildren<Collider>();
+        List<Collider> ignoreColliders = new List<Collider>();
+
+        //  ADDS ALL OF OUR DAMAGEABLE CHARACTER COLLIDERS, TO THE LIST THAT WILL BE USED TO IGNORE COLLISIONS
+        foreach (var collider in damageableCharacterColliders)
+        {
+            ignoreColliders.Add(collider);
+        }
+
+        //  ADDS THE CHARACTER CONTROLLER COLLIDER, TO THE LIST THAT WILL BE USED TO IGNORE COLLISIONS
+        ignoreColliders.Add(characterControllerCollider);
+
+        //  IGNORES COLLISIONS BETWEEN ALL OF THE COLLIDERS IN THE LIST
+        foreach (var colliderA in ignoreColliders)
+        {
+            foreach (var colliderB in ignoreColliders)
+            {
+                Physics.IgnoreCollision(colliderA, colliderB, true);
+            }
+        }
     }
 }
