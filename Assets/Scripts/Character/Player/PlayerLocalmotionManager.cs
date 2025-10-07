@@ -120,7 +120,7 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
 
     private void HandleJumpingMovement()
     {
-        if (player.isJumping)
+        if (player.PlayerNetworkManager.isJumping.Value)
         {
             player.GetCharacterController().Move(jumpDirection * jumpForwardSpeed * Time.deltaTime);
         }
@@ -176,11 +176,11 @@ public class PlayerLocalmotionManager : CharacterLocalmotionManager
 
     public void AttemptToPerformJump()
     {
-        if (player.isPerformingAction || player.PlayerNetworkManager.currentStamina.Value <= 0 || player.isJumping || !player.isGrounded) return;
+        if (player.isPerformingAction || player.PlayerNetworkManager.currentStamina.Value <= 0 || player.PlayerNetworkManager.isJumping.Value || !player.isGrounded) return;
 
         player.PlayerAnimatorManager.PlayTargetActionAnimation("Jump Start", false);
 
-        player.isJumping = true;
+        player.PlayerNetworkManager.isJumping.Value = true;
 
         player.PlayerNetworkManager.currentStamina.Value -= jumpStaminaCost;
 

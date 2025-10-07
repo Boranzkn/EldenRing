@@ -34,7 +34,7 @@ public class CharacterLocalmotionManager : MonoBehaviour
         }
         else
         {
-            if (!character.isJumping && !fallingVelocityHasBeenSet)
+            if (!character.CharacterNetworkManager.isJumping.Value && !fallingVelocityHasBeenSet)
             {
                 fallingVelocityHasBeenSet = true;
                 yVelocity.y = fallStartYVelocity;

@@ -79,6 +79,12 @@ public class PlayerManager : CharacterManager
         //  UPDATES THE EQUIPPED WEAPON WHEN THE WEAPON ID CHANGES
         PlayerNetworkManager.currentRightHandWeaponID.OnValueChanged += PlayerNetworkManager.OnCurrentRightHandWeaponIDChange;
         PlayerNetworkManager.currentLeftHandWeaponID.OnValueChanged += PlayerNetworkManager.OnCurrentLeftHandWeaponIDChange;
+
+        //  UPON CONNECTING, IF WE ARE THE OWNER OF THIS CHARACTER, BUT NOT THE SERVER, RELOAD OUR CHARACTER DATA TO THIS NEWLY INSTANTIATED CHARACTER
+        if (IsOwner && !IsServer)
+        {
+            LoadGameDataFromCurrentCharacterData(ref WorldSaveGameManager.Instance.currentCharacterData);
+        }
     }
 
     public override IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
