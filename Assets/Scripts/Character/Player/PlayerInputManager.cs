@@ -24,6 +24,7 @@ public class PlayerInputManager : MonoBehaviour
     private bool dodgeInput = false;
     private bool sprintInput = false;
     private bool jumpInput = false;
+    private bool RB_Input = false;
 
     private void Awake()
     {
@@ -80,6 +81,7 @@ public class PlayerInputManager : MonoBehaviour
         HandleDodgeInput();
         HandleSprintInput();
         HandleJumpInput();
+        HandleRBInput();
     }
 
     private void HandlePlayerMovementInput()
@@ -148,6 +150,21 @@ public class PlayerInputManager : MonoBehaviour
         }
     }
 
+    private void HandleRBInput()
+    {
+        if (RB_Input)
+        {
+            RB_Input = false;
+
+            //  TODO: IF WE HAVE A UI WINDOW OPEN, RETURN AND DO NOTHING
+
+            player.PlayerNetworkManager.SetCharacterActionHand(true);
+
+            //  TODO: IF WE ARE TWO HANDING THE WEAPON, USE THE TWO HANDED ACTION
+
+            player.PlayerCombatManager.PerformWeaponBasedAction(player.PlayerInventoryManager.currentRightHandWeapon.oh_RB_Action, player.PlayerInventoryManager.currentRightHandWeapon);
+        }
+    }
 
     //  GETTER METHODS
     public float GetVerticalInput()
@@ -202,6 +219,7 @@ public class PlayerInputManager : MonoBehaviour
             //playerControls.PlayerCamera.Mouse.performed += i => cameraInput = i.ReadValue<Vector2>();
             playerControls.PlayerActions.Dodge.performed += i => dodgeInput = true;
             playerControls.PlayerActions.Jump.performed += i => jumpInput = true;
+            playerControls.PlayerActions.RB.performed += i => RB_Input = true;
             playerControls.PlayerActions.Sprint.performed += i => sprintInput = true;
             playerControls.PlayerActions.Sprint.canceled += i => sprintInput = false;
         }

@@ -10,6 +10,7 @@ public class PlayerManager : CharacterManager
     [HideInInspector] public PlayerStatsManager PlayerStatsManager { private set; get; }
     [HideInInspector] public PlayerInventoryManager PlayerInventoryManager { private set; get; }
     [HideInInspector] public PlayerEquipmentManager PlayerEquipmentManager { private set; get; }
+    [HideInInspector] public PlayerCombatManager PlayerCombatManager { private set; get; }
 
     [Header("DEBUG MENU")]
     [SerializeField] private bool respawnCharacter = false;
@@ -25,6 +26,7 @@ public class PlayerManager : CharacterManager
         PlayerStatsManager = GetComponent<PlayerStatsManager>();
         PlayerInventoryManager = GetComponent<PlayerInventoryManager>();
         PlayerEquipmentManager = GetComponent<PlayerEquipmentManager>();
+        PlayerCombatManager = GetComponent<PlayerCombatManager>();
     }
 
     protected override void Update()
@@ -79,6 +81,7 @@ public class PlayerManager : CharacterManager
         //  UPDATES THE EQUIPPED WEAPON WHEN THE WEAPON ID CHANGES
         PlayerNetworkManager.currentRightHandWeaponID.OnValueChanged += PlayerNetworkManager.OnCurrentRightHandWeaponIDChange;
         PlayerNetworkManager.currentLeftHandWeaponID.OnValueChanged += PlayerNetworkManager.OnCurrentLeftHandWeaponIDChange;
+        PlayerNetworkManager.currentWeaponBeingUsed.OnValueChanged += PlayerNetworkManager.OnCurrentWeaponBeingUsedIDChange;
 
         //  UPON CONNECTING, IF WE ARE THE OWNER OF THIS CHARACTER, BUT NOT THE SERVER, RELOAD OUR CHARACTER DATA TO THIS NEWLY INSTANTIATED CHARACTER
         if (IsOwner && !IsServer)
