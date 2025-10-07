@@ -40,4 +40,16 @@ public class CharacterAnimatorManager : MonoBehaviour
         //  PLAY ANIMATION ACROSS NETWORK
         character.CharacterNetworkManager.PlayActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
     }
+
+    public virtual void PlayTargetAttackActionAnimation(string targetAnimation, bool isPerformingAction, bool applyRootMotion = true, bool canRotate = false, bool canMove = false)
+    {
+        character.applyRootMotion = applyRootMotion;
+        character.Animator.CrossFade(targetAnimation, 0.2f);
+        character.isPerformingAction = isPerformingAction;
+        character.canRotate = canRotate;
+        character.canMove = canMove;
+
+        //  PLAY ANIMATION ACROSS NETWORK
+        character.CharacterNetworkManager.PlayAttackActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
+    }
 }

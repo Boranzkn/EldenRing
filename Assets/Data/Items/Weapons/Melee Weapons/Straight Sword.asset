@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12545fbf8043d5849b8a6e8b5ca28ffa, type: 3}
   m_Name: Straight Sword
   m_EditorClassIdentifier: 
-  itemID: 0
+  itemID: 1
   itemName: Straight Sword
   itemIcon: {fileID: 21300000, guid: 973b9084399f9ba43aa956b9a7b73332, type: 3}
   itemDescription: A straight sword.
@@ -28,4 +28,4 @@ MonoBehaviour:
   lightningDamage: 0
   poiseDamage: 25
   baseStaminaCost: 20
-  oh_RB_Action: {fileID: 11400000, guid: 6df9b7e2bf14b88429510acc1b31c120, type: 2}
+  oh_RB_Action: {fileID: 11400000, guid: 327da145f3664a44984006df9cef2f0a, type: 2}

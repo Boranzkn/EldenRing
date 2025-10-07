@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class PlayerCombatManager : CharacterCombatManager
@@ -15,9 +16,13 @@ public class PlayerCombatManager : CharacterCombatManager
 
     public void PerformWeaponBasedAction(WeaponItemAction weaponAction, WeaponItem weaponPerformingAction)
     {
-        //  PERFORM THE ACTION
-        weaponAction.AttempToPerformAction(player, weaponPerformingAction);
+        if (player.IsOwner)
+        {
+            //  PERFORM THE ACTION
+            weaponAction.AttempToPerformAction(player, weaponPerformingAction);
 
-        //  NOTIFY THE SERVER WE HAVE PERFORMED THE ACTION, SO WE PERFORM IT FROM THERE PERSPECTIVE ALSO
+            //  NOTIFY THE SERVER WE HAVE PERFORMED THE ACTION, SO WE PERFORM IT FROM THERE PERSPECTIVE ALSO
+            player.PlayerNetworkManager.NotifyTheServerOfWeaponActionServerRpc(NetworkManager.Singleton.LocalClientId, weaponAction.actionID, weaponPerformingAction.itemID);
+        }
     }
 }
