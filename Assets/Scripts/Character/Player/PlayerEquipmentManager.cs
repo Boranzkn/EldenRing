@@ -54,7 +54,6 @@ public class PlayerEquipmentManager : CharacterEquipmentManager
 
 
     //  RIGHT WEAPON
-
     public void SwitchRightWeapon()
     {
         if (!player.IsOwner) return;
@@ -139,7 +138,6 @@ public class PlayerEquipmentManager : CharacterEquipmentManager
 
 
     //  LEFT WEAPON
-
     public void SwitchLeftWeapon()
     {
 
@@ -157,6 +155,37 @@ public class PlayerEquipmentManager : CharacterEquipmentManager
             leftHandSlot.LoadWeapon(leftHamdWeaponModel);
             leftWeaponManager = leftHamdWeaponModel.GetComponent<WeaponManager>();
             leftWeaponManager.SetWeaponDamage(player, player.PlayerInventoryManager.currentLeftHandWeapon);
+        }
+    }
+
+    // DAMAGE COLLIDERS
+    public void OpenDamageColliders()
+    {
+        // OPEN RIGHT WEAPON DAMAGE COLLIDER
+        if (player.PlayerNetworkManager.isUsingRightHand.Value)
+        {
+            rightWeaponManager.meleeDamageCollider.EnableDamageCollider();
+        }
+        // OPEN LEFT WEAPON DAMAGE COLLIDER
+        else if (player.PlayerNetworkManager.isUsingLeftHand.Value)
+        {
+            leftWeaponManager.meleeDamageCollider.EnableDamageCollider();
+        }
+
+        // PLAY WHOOSH SFX
+    }
+
+    public void CloseDamageColliders()
+    {
+        // OPEN RIGHT WEAPON DAMAGE COLLIDER
+        if (player.PlayerNetworkManager.isUsingRightHand.Value)
+        {
+            rightWeaponManager.meleeDamageCollider.DisableDamageCollider();
+        }
+        // OPEN LEFT WEAPON DAMAGE COLLIDER
+        else if (player.PlayerNetworkManager.isUsingLeftHand.Value)
+        {
+            leftWeaponManager.meleeDamageCollider.DisableDamageCollider();
         }
     }
 }

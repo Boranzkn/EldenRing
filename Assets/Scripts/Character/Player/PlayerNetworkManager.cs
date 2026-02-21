@@ -91,7 +91,7 @@ public class PlayerNetworkManager : CharacterNetworkManager
 
     private void PerformWeaponBasedAction(int actionID, int weaponID)
     {
-        WeaponItemAction weaponItemAction = WorldActionManager.Instance.GetWeaponItemActionNByID(actionID);
+        WeaponItemAction weaponItemAction = WorldActionManager.Instance.GetWeaponItemActionByID(actionID);
 
         if (weaponItemAction != null)
         {

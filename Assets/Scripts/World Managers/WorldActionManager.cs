@@ -30,7 +30,7 @@ public class WorldActionManager : MonoBehaviour
         }
     }
 
-    public WeaponItemAction GetWeaponItemActionNByID(int id)
+    public WeaponItemAction GetWeaponItemActionByID(int id)
     {
         return weaponItemActions.FirstOrDefault(action => action.actionID == id);
     }

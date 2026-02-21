@@ -5,7 +5,7 @@ using UnityEngine;
 public class TakeDamageEffect : InstantCharacterEffect
 {
     [Header("Character Causing Damage")]
-    private CharacterManager characterCausingDamage;
+    public CharacterManager characterCausingDamage;
 
     [Header("Damage")]
     public float physicalDamage = 0;
@@ -31,7 +31,7 @@ public class TakeDamageEffect : InstantCharacterEffect
     //private AudioClip elementalDamageSoundFX;
 
     [Header("Direction of Damage Taken From")]
-    //private float angleHitFrom;
+    public float angleHitFrom;
     public Vector3 contactPoint;
 
     public override void ProcessEffect(CharacterManager character)

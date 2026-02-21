@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d5ebd2c230d8f34f8cdcedd04e2d453, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meleeDamageCollider: {fileID: 0}
+  meleeDamageCollider: {fileID: 8732989215929808176}
 --- !u!1 &1312638668439793469
 GameObject:
   m_ObjectHideFlags: 0
@@ -55,8 +55,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6978887676963369123}
-  - component: {fileID: 8732989215929808176}
   - component: {fileID: 417733204219067280}
+  - component: {fileID: 8732989215929808176}
   m_Layer: 10
   m_Name: Damage Collider
   m_TagString: Untagged
@@ -79,24 +79,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6279442281608289766}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8732989215929808176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1312638668439793469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ddd8876d151ffe47bbf44725f2a7ec2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  physicalDamage: 0
-  magicDamage: 0
-  fireDamage: 0
-  lightningDamage: 0
-  holyDamage: 0
-  characterCausingDamage: {fileID: 0}
 --- !u!65 &417733204219067280
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -118,6 +100,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.06078245, y: 0.007195921, z: 1.0055397}
   m_Center: {x: -0.00045893528, y: -0.00050151546, z: 0.5832799}
+--- !u!114 &8732989215929808176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1312638668439793469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ddd8876d151ffe47bbf44725f2a7ec2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageCollider: {fileID: 417733204219067280}
+  physicalDamage: 0
+  magicDamage: 0
+  fireDamage: 0
+  lightningDamage: 0
+  holyDamage: 0
+  characterCausingDamage: {fileID: 0}
+  light_Attack_01_Modifier: 0
 --- !u!1 &1859448135085555713
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,6 +182,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -201,9 +205,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &7590132448960655723
 GameObject:
